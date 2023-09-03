@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación de Cola de Procesos FCFS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Simulación de Cola de Procesos FCFS</h1>
+
+    <!-- Formulario para ingresar procesos -->
+    <form id="process-form">
+        <label for="process-name">Nombre del Proceso:</label>
+        <input type="text" id="process-name" required>
+        <label for="process-time">Tiempo de Ejecución (ms):</label>
+        <input type="number" id="process-time" required>
+        <button type="submit">Agregar Proceso</button>
+    </form>
+
+    <!-- Lista de Procesos -->
+    <h2>Lista de Procesos:</h2>
+    <ul id="process-list">
+        <!-- Aquí se mostrarán los procesos ingresados -->
+    </ul>
+
+    <!-- Botones para iniciar y limpiar la simulación -->
+    <button id="start-btn">Iniciar FCFS</button>
+    <button id="clear-btn">Limpiar</button>
+
+    <!-- Salida de la simulación -->
+    <div id="output">
+        <!-- Aquí se mostrará el progreso de la simulación -->
+    </div>
+
+    <!-- Explicación de FCFS -->
+    <div id="explanation">
+        <h2>Explicación de FCFS (First-Come, First-Served)</h2>
+        <p>
+            FCFS es un algoritmo de planificación de procesos en el que los procesos se ejecutan en el orden en que llegan a la cola de procesos. 
+            Esto significa que el primer proceso en llegar es el primero en ser atendido, independientemente de su tiempo de ejecución. 
+            Es un algoritmo simple pero no siempre es el más eficiente, ya que procesos largos pueden bloquear procesos cortos que llegan después.
+        </p>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Obtiene elementos del DOM
+            const processForm = document.getElementById("process-form");
+            const processList = document.getElementById("process-list");
+            const startButton = document.getElementById("start-btn");
+            const clearButton = document.getElementById("clear-btn");
+            const outputDiv = document.getElementById("output");
+            const processes = [];
+
+            // Escucha el evento de envío del formulario para agregar procesos
+            processForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                const processName = document.getElementById("process-name").value;
+                const processTime = parseInt(document.getElementById("process-time").value);
+
+                // Almacena los procesos ingresados en un array
+                processes.push({ name: processName, time: processTime });
+                displayProcessList();
+                processForm.reset();
+            });
+
+            // Escucha el evento de clic en el botón "Iniciar FCFS"
+            startButton.addEventListener("click", () => {
+                executeFCFS(processes);
+            });
+
+            // Escucha el evento de clic en el botón "Limpiar"
+            clearButton.addEventListener("click", () => {
+                // Limpia la lista de procesos y la salida
+                processes.length = 0;
+                processList.innerHTML = "";
+                outputDiv.innerHTML = "";
+            });
+
+            // Función para mostrar la lista de procesos en la página
+            function displayProcessList() {
+                processList.innerHTML = "";
+                processes.forEach((process) => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${process.name} (${process.time} ms)`;
+                    processList.appendChild(listItem);
+                });
+            }
+
+            // Función para ejecutar el algoritmo FCFS
+            function executeFCFS(processes) {
+                outputDiv.innerHTML = "Ejecutando FCFS:<br>";
+
+                let currentTime = 0;
+                for (const process of processes) {
+                    outputDiv.innerHTML += `${process.name} en ejecución...<br>`;
+                    currentTime += process.time;
+                    outputDiv.innerHTML += `${process.name} completado en ${currentTime} ms<br>`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
